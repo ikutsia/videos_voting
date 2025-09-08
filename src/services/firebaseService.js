@@ -196,13 +196,18 @@ class FirebaseService {
       const usersVotes = [];
       usersSnapshot.forEach((doc) => {
         const userData = doc.data();
-        usersVotes.push({
-          id: doc.id,
-          name: userData.name,
-          votesRemaining: userData.votesRemaining || 0,
-          votedVideos: votesMap[doc.id] || [],
-          lastSeen: userData.lastSeen,
-        });
+        const votedVideos = votesMap[doc.id] || [];
+
+        // Only include users who have actually voted
+        if (votedVideos.length > 0) {
+          usersVotes.push({
+            id: doc.id,
+            name: userData.name,
+            votesRemaining: userData.votesRemaining || 0,
+            votedVideos: votedVideos,
+            lastSeen: userData.lastSeen,
+          });
+        }
       });
       return usersVotes;
     } catch (error) {
@@ -221,6 +226,48 @@ class FirebaseService {
     try {
       return db !== null;
     } catch (error) {
+      return false;
+    }
+  }
+
+  // Clear all voting data (for production reset)
+  async clearAllData() {
+    try {
+      const { getDocs, collection, deleteDoc, doc } = await import(
+        "firebase/firestore"
+      );
+
+      console.log("Starting data cleanup...");
+
+      // Clear voting data
+      const votingDataRef = doc(db, this.votingCollection, this.videosDocId);
+      await deleteDoc(votingDataRef);
+      console.log("Voting data cleared");
+
+      // Clear all users
+      const usersSnapshot = await getDocs(collection(db, this.usersCollection));
+      const userPromises = [];
+      usersSnapshot.forEach((userDoc) => {
+        userPromises.push(deleteDoc(userDoc.ref));
+      });
+      await Promise.all(userPromises);
+      console.log(`Cleared ${usersSnapshot.size} user records`);
+
+      // Clear all user votes
+      const userVotesSnapshot = await getDocs(
+        collection(db, this.userVotesCollection)
+      );
+      const votePromises = [];
+      userVotesSnapshot.forEach((voteDoc) => {
+        votePromises.push(deleteDoc(voteDoc.ref));
+      });
+      await Promise.all(votePromises);
+      console.log(`Cleared ${userVotesSnapshot.size} vote records`);
+
+      console.log("All data cleared successfully!");
+      return true;
+    } catch (error) {
+      console.error("Error clearing data:", error);
       return false;
     }
   }

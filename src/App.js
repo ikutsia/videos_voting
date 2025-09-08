@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SignupPage from "./components/SignupPage";
 import VotingPage from "./components/VotingPage";
+import CleanupPage from "./components/CleanupPage";
 import firebaseService from "./services/firebaseService";
 
 function App() {
@@ -240,16 +241,21 @@ function App() {
     }
   };
 
+  // Check if we're on the cleanup page
+  const isCleanupPage = window.location.pathname === "/cleanup";
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Connection Status Indicator */}
-      {isFirebaseConnected && (
+      {isFirebaseConnected && !isCleanupPage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm z-50">
           🔗 Live Sync
         </div>
       )}
 
-      {!user ? (
+      {isCleanupPage ? (
+        <CleanupPage />
+      ) : !user ? (
         <SignupPage onSignup={handleSignup} />
       ) : (
         <VotingPage
