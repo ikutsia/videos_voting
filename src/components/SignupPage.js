@@ -14,25 +14,24 @@ const SignupPage = ({ onSignup }) => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome!</h1>
-          <p className="text-gray-600">Let's get started with your name</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+            Choose Top Five Videos
+          </h1>
+          <p className="text-gray-600 mb-2">
+            Write your first name to start choosing videos.
+          </p>
+          <p className="text-gray-600">You can only vote 5 videos.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              What is your name?
-            </label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-              placeholder="Enter your name"
+              placeholder="Enter your first name"
               required
             />
           </div>

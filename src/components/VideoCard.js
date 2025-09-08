@@ -1,6 +1,6 @@
 import React from "react";
 
-const VideoCard = ({ video, user, onVote }) => {
+const VideoCard = ({ video, user, onVote, onVideoClick }) => {
   const hasVoted = video.voters.includes(user.name);
   const canVote = user.votesRemaining > 0 && !hasVoted;
 
@@ -13,7 +13,7 @@ const VideoCard = ({ video, user, onVote }) => {
   const handleVideoClick = (e) => {
     if (video.link) {
       e.preventDefault();
-      window.open(video.link, "_blank");
+      onVideoClick(video);
     }
   };
 
