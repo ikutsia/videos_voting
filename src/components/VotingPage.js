@@ -43,7 +43,10 @@ const VotingPage = ({ user, videos, onVote }) => {
             How to vote:
           </h3>
           <ul className="text-blue-800 space-y-1">
-            <li>• Click on a video card to vote for it</li>
+            <li>
+              • Click the video button to watch the video (opens in new tab)
+            </li>
+            <li>• Click the "Vote" button to vote for a video</li>
             <li>• You can vote for up to 5 videos total</li>
             <li>• Your name will appear below videos you've voted for</li>
           </ul>

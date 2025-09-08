@@ -10,7 +10,7 @@ const VideoCard = ({ video, user, onVote }) => {
     }
   };
 
-  const handleLinkClick = (e) => {
+  const handleVideoClick = (e) => {
     if (video.link) {
       e.preventDefault();
       window.open(video.link, "_blank");
@@ -26,27 +26,22 @@ const VideoCard = ({ video, user, onVote }) => {
       <div className="p-6">
         {/* Video Header */}
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">{video.name}</h3>
           <span className="text-sm text-gray-500">#{video.id}</span>
         </div>
 
-        {/* Video Link Section */}
+        {/* Video Button */}
         <div className="mb-4">
-          {video.link ? (
-            <a
-              href={video.link}
-              onClick={handleLinkClick}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 text-sm break-all underline"
-            >
-              {video.link.length > 40
-                ? `${video.link.substring(0, 40)}...`
-                : video.link}
-            </a>
-          ) : (
-            <p className="text-gray-400 text-sm italic">No link added yet</p>
-          )}
+          <button
+            onClick={handleVideoClick}
+            disabled={!video.link}
+            className={`w-full py-3 px-4 rounded-lg font-semibold text-lg transition-all ${
+              video.link
+                ? "bg-orange-500 text-white hover:bg-orange-600 hover:scale-105 cursor-pointer"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+          >
+            {video.name}
+          </button>
         </div>
 
         {/* Vote Button */}
