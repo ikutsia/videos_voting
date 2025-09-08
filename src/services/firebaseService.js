@@ -204,7 +204,6 @@ class FirebaseService {
           lastSeen: userData.lastSeen,
         });
       });
-
       return usersVotes;
     } catch (error) {
       console.error("Error getting all users votes:", error);

@@ -19,6 +19,7 @@ function App() {
       }
 
       try {
+        console.log("Initializing Firebase...");
         // Create initial videos data
         const initialVideos = Array.from({ length: 27 }, (_, index) => {
           const videoId = index + 1;
@@ -128,8 +129,12 @@ function App() {
         const votingData = await firebaseService.getVotingData();
         if (votingData && votingData.videos) {
           setVideos(votingData.videos);
+          setIsFirebaseConnected(true);
+          console.log("Firebase connected successfully (initial data loaded)");
         } else {
           setVideos(initialVideos);
+          setIsFirebaseConnected(true);
+          console.log("Firebase connected successfully (using initial videos)");
         }
 
         // Cleanup listener on unmount
@@ -225,9 +230,13 @@ function App() {
 
     // Save to Firebase if available
     if (isFirebaseConnected) {
-      await firebaseService.updateVotingData(updatedVideos);
-      await firebaseService.saveUserData(user.id, updatedUser);
-      await firebaseService.saveUserVote(user.id, user.name, videoId);
+      try {
+        await firebaseService.updateVotingData(updatedVideos);
+        await firebaseService.saveUserData(user.id, updatedUser);
+        await firebaseService.saveUserVote(user.id, user.name, videoId);
+      } catch (error) {
+        console.error("Error saving to Firebase:", error);
+      }
     }
   };
 
